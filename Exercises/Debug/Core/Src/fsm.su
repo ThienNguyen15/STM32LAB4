@@ -1,0 +1,2 @@
+fsm.c:9:6:command_parser	4	static
+fsm.c:14:6:uart_communiation	4	static
