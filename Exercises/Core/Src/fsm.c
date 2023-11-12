@@ -33,8 +33,10 @@ void command_parser_fsm()
 		case READING:
 			if(buffer_var != '!' && buffer_var != '#')
 				strncat(concatstr, (char*)&buffer_var, 1);
-			if(buffer_var == '#')
+			else if(buffer_var == '#')
 				state_cmd = CHECK;
+			else
+				state_cmd = INIT;
 			break;
 		case CHECK:
 			if(strcmp(concatstr, "RST") == 0)
