@@ -70,7 +70,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2)
 	{
-		HAL_UART_Transmit(&huart2, &buffer_var, 1, 500);
+		HAL_UART_Transmit(&huart2, &buffer_var, 1, 100);
 		buffer[index_buffer++] = buffer_var;
 		if(index_buffer == MAX_BUFFER)
 			index_buffer = 0;
