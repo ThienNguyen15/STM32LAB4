@@ -37,31 +37,31 @@ void command_parser_fsm()
     	case READING:
     		if (buffer_var != '!' && buffer_var != '#' && idx_check <= strlen(concatstr))
     		{
-				strncat(concatstr, (char*)&buffer_var, 1);
+			strncat(concatstr, (char*)&buffer_var, 1);
     			idx_check++;
     		}
-			else if(buffer_var == '#')
-				state_cmd = CHECK;
-			if(idx_check > strlen(concatstr))
-			{
-			    memset(concatstr, 0, sizeof(concatstr));
-				state_cmd = INIT;
-			}
-			break;
-		case CHECK:
-			if(strcmp(concatstr, "RST") == 0)
-			{
-				cmd_flag = RST;
-				setTimer1(1);
-			}
-			if(strcmp(concatstr, "OK") == 0)
-				cmd_flag = OK;
-		    memset(concatstr, 0, sizeof(concatstr));
+		else if(buffer_var == '#')
+			state_cmd = CHECK;
+		if(idx_check > strlen(concatstr))
+		{
+			memset(concatstr, 0, sizeof(concatstr));
 			state_cmd = INIT;
-			break;
-		default:
-			break;
-	}
+		}
+		break;
+	case CHECK:
+		if(strcmp(concatstr, "RST") == 0)
+		{
+			cmd_flag = RST;
+			setTimer1(1);
+		}
+		if(strcmp(concatstr, "OK") == 0)
+			cmd_flag = OK;
+		memset(concatstr, 0, sizeof(concatstr));
+		state_cmd = INIT;
+		break;
+	default:
+		break;
+    }
 }
 
 void uart_communication_fsm()
