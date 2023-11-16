@@ -18,11 +18,9 @@
 
 #define READING		1
 
-#define CHECK		2
+#define RST			2
 
-#define RST			3
-
-#define OK			4
+#define OK			3
 
 #define MAX_BUFFER	50
 

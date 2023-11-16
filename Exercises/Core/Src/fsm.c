@@ -20,44 +20,38 @@ uint8_t buffer_flag = 0;
 int state_cmd = INIT;
 uint8_t cmd_flag = INIT;
 int ADC_value = 0;
-int idx_check = 0;
 
 void command_parser_fsm()
 {
     switch (state_cmd)
     {
     	case INIT:
-    		memset(concatstr, 0, sizeof(concatstr));
+			memset(concatstr, 0, sizeof(concatstr));
     		if (buffer_var == '!')
     		{
+    			memset(concatstr, 0, sizeof(concatstr));
     			state_cmd = READING;
-    			idx_check = 0;
     		}
     		break;
     	case READING:
-    		if (buffer_var != '!' && buffer_var != '#' && idx_check <= strlen(concatstr))
-    		{
+			if(buffer_var != '!' && buffer_var != '#')
+			{
 				strncat(concatstr, (char*)&buffer_var, 1);
-    			idx_check++;
+			}
+    		else if (buffer_var == '!')
+    		{
+				memset(concatstr, 0, sizeof(concatstr));
     		}
 			else if(buffer_var == '#')
-				state_cmd = CHECK;
-			if(idx_check > strlen(concatstr))
 			{
-			    memset(concatstr, 0, sizeof(concatstr));
-				state_cmd = INIT;
+				if(strcmp(concatstr, "RST") == 0)
+				{
+					cmd_flag = RST;
+					setTimer1(1);
+				}
+				if(strcmp(concatstr, "OK") == 0)
+					cmd_flag = OK;
 			}
-			break;
-		case CHECK:
-			if(strcmp(concatstr, "RST") == 0)
-			{
-				cmd_flag = RST;
-				setTimer1(1);
-			}
-			if(strcmp(concatstr, "OK") == 0)
-				cmd_flag = OK;
-		    memset(concatstr, 0, sizeof(concatstr));
-			state_cmd = INIT;
 			break;
 		default:
 			break;
@@ -73,7 +67,8 @@ void uart_communication_fsm()
 			if(timer1_flag == 1)
 			{
 				ADC_value = HAL_ADC_GetValue(&hadc1);
-				HAL_UART_Transmit(&huart2, (void *)str, sprintf(str, "!ADC=%d#\r\n",ADC_value), 500);
+				HAL_UART_Transmit(&huart2, (void *)str, sprintf(str, "\r\n!ADC=%d#\r\n",ADC_value), 500);
+				state_cmd = INIT;
 				setTimer1(300);
 			}
 			break;
