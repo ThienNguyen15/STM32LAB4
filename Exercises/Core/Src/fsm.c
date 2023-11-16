@@ -34,7 +34,6 @@ void command_parser_fsm()
     		}
     		break;
     	case READING:
-<<<<<<< HEAD
 			if(buffer_var != '!' && buffer_var != '#')
 			{
 				strncat(concatstr, (char*)&buffer_var, 1);
@@ -57,35 +56,6 @@ void command_parser_fsm()
 		default:
 			break;
 	}
-=======
-    		if (buffer_var != '!' && buffer_var != '#' && idx_check <= strlen(concatstr))
-    		{
-			strncat(concatstr, (char*)&buffer_var, 1);
-    			idx_check++;
-    		}
-		else if(buffer_var == '#')
-			state_cmd = CHECK;
-		if(idx_check > strlen(concatstr))
-		{
-			memset(concatstr, 0, sizeof(concatstr));
-			state_cmd = INIT;
-		}
-		break;
-	case CHECK:
-		if(strcmp(concatstr, "RST") == 0)
-		{
-			cmd_flag = RST;
-			setTimer1(1);
-		}
-		if(strcmp(concatstr, "OK") == 0)
-			cmd_flag = OK;
-		memset(concatstr, 0, sizeof(concatstr));
-		state_cmd = INIT;
-		break;
-	default:
-		break;
-    }
->>>>>>> 1298edf249e86d394866ed97022e85a1c1297064
 }
 
 void uart_communication_fsm()

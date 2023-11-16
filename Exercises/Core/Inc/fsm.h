@@ -25,9 +25,13 @@
 #define MAX_BUFFER	50
 
 extern uint8_t buffer_var;
+
 extern uint8_t buffer[MAX_BUFFER];
+
 extern char concatstr[MAX_BUFFER];
+
 extern uint8_t index_buffer;
+
 extern uint8_t buffer_flag;
 
 void command_parser_fsm();
