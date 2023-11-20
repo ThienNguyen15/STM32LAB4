@@ -1,2 +1,3 @@
-fsm.c:24:6:command_parser_fsm	8	static
-fsm.c:61:6:uart_communication_fsm	64	static
+fsm.c:25:6:check_cmd_fnc	8	static
+fsm.c:36:6:command_parser_fsm	8	static
+fsm.c:68:6:uart_communication_fsm	64	static

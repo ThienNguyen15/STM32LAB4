@@ -18,8 +18,20 @@ uint8_t index_buffer = 0;
 uint8_t buffer_flag = 0;
 
 int state_cmd = INIT;
-uint8_t cmd_flag = INIT;
+int cmd_flag = INIT;
+int check_cmd = 0;
 int ADC_value = 0;
+
+void check_cmd_fnc()
+{
+	if(strcmp(concatstr, "RST") == 0)
+	{
+		cmd_flag = RST;
+		setTimer1(1);
+	}
+	if(strcmp(concatstr, "OK") == 0)
+		cmd_flag = OK;
+}
 
 void command_parser_fsm()
 {
@@ -44,13 +56,8 @@ void command_parser_fsm()
     		}
 			else if(buffer_var == '#')
 			{
-				if(strcmp(concatstr, "RST") == 0)
-				{
-					cmd_flag = RST;
-					setTimer1(1);
-				}
-				if(strcmp(concatstr, "OK") == 0)
-					cmd_flag = OK;
+				check_cmd = 1;
+				cmd_flag = INIT1;
 			}
 			break;
 		default:
@@ -63,6 +70,13 @@ void uart_communication_fsm()
 	char str[50];
 	switch(cmd_flag)
 	{
+		case INIT1:
+			if(check_cmd == 1)
+			{
+				check_cmd_fnc();
+			}
+			check_cmd = 0;
+			break;
 		case RST:
 			if(timer1_flag == 1)
 			{
@@ -74,7 +88,7 @@ void uart_communication_fsm()
 			break;
 		case OK:
 			ADC_value = 0;
-			cmd_flag = INIT;
+			cmd_flag = INIT1;
 			break;
 		default:
 			break;
